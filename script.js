@@ -1,32 +1,81 @@
+// const createElements = (array)=>{
+
+// }
+
 const loadLessons = () => {
     fetch("https://openapi.programming-hero.com/api/levels/all")
         .then(res => res.json())
         .then(json => displayLesson(json.data))
 }
 
-const removeActiveClass = ()=>{
+const removeActiveClass = () => {
 
     const removeActiveClass = document.querySelectorAll(".remove-btn")
-    removeActiveClass.forEach((btn)=>btn.classList.remove("active"))
+    removeActiveClass.forEach((btn) => btn.classList.remove("active"))
 
 }
 
-const displayWords = (id)=>{
+const displayWords = (id) => {
     fetch(`https://openapi.programming-hero.com/api/level/${id}`)
-    .then(res => res.json())
-    .then(data => wordLessons(data.data))
+        .then(res => res.json())
+        .then(data => wordLessons(data.data))
     removeActiveClass()
     const clickBtn = document.getElementById(`click-btn-${id}`)
     clickBtn.classList.add("active")
 }
 
-const wordLessons = (words)=>{
+const loadWordDetail = async (id) => {
+
+    const url = `https://openapi.programming-hero.com/api/word/${id}`
+    const res = await fetch(url)
+    const details = await res.json()
+
+    displayDetails(details.data);
+
+}
+
+const displayDetails = (words) => {
+
+    const synonyms = words.synonyms;
+
+    const detailBox = document.getElementById("detail-box")
+    detailBox.innerHTML = `
+    <div class="space-y-5">
+        <div>
+            <h2 class="text-2xl font-bold">
+                ${words.word} (<i class="fa-solid fa-microphone-lines"></i> :${words.pronunciation
+                })
+            </h2>
+        </div> 
+        <div class="space-y-2">
+            <h2 class="font-bold">Meaning</h2>
+            <p class="font-bold">${words.meaning}</p>  
+        </div>
+        <div class="">
+            <h2 class="font-bold">Example</h2>
+            <p class="text-gray-500">${words.sentence}</p>
+        </div>
+        <div class="">
+            <h2 class="font-bold">Synonym</h2>
+            <div>${synonyms.map((synnonym)=>(
+                `<span class="btn">${synnonym}</span>`
+            )).join(" ")}</div>
+        </div>
+    </div>        
+    `
+
+
+    document.getElementById("my_modal_5").showModal()
+
+}
+
+const wordLessons = (words) => {
 
     const wordContainer = document.getElementById("word-container")
     wordContainer.innerHTML = ""
 
-    if(words.length===0){
-        wordContainer.innerHTML= `
+    if (words.length === 0) {
+        wordContainer.innerHTML = `
             <div
         class="text-center  col-span-full rounded-xl py-10 space-y-6 font-bangla"
       >
@@ -39,11 +88,11 @@ const wordLessons = (words)=>{
         `
     }
 
-    words.forEach((word) =>{
-        
+    words.forEach((word) => {
+
         const card = document.createElement("div")
 
-        card.innerHTML= `
+        card.innerHTML = `
             <div
         class="bg-white rounded-xl shadow-sm text-center py-10 px-5 space-y-4"
       >
@@ -51,7 +100,7 @@ const wordLessons = (words)=>{
       <p class="font-semibold">Meaning /Pronounciation</p>
       <div class="text-2xl font-medium font-bangla">${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি"}/${word.pronunciation ? word.pronunciation : "Pronounciation পাওয়া  যায়নি"}</div>
        <div class="flex justify-between items-center">
-       <button onclick="my_modal_5.showModal()" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]">
+       <button onclick="loadWordDetail(${word.id})" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]">
             <i class="fa-solid fa-circle-info"></i>
           </button>
           <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]">
@@ -62,7 +111,7 @@ const wordLessons = (words)=>{
         `
         wordContainer.appendChild(card)
     })
-    
+
 
 }
 
