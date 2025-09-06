@@ -112,11 +112,21 @@
         <div id="level-container" class="flex gap-5 flex-wrap justify-center"></div>
     </section>
 
+    <section id="loading-icon" class="flex justify-center items-center py-10 hidden">
+        <span class="loading loading-spinner loading-xl"></span>
+    </section>
+
     <section id="word-container" class="bg-gray-100 p-10 w-11/12 mx-auto my-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="text-center col-span-full rounded-xl py-10 space-y-6 font-bangla">
+            <p class="text-xl font-medium text-gray-400">
+                আপনি এখনো কোন Lesson Select করেন নি
+            </p>
+            <h2 class="font-bold text-4xl">একটি Lesson Select করুন।</h2>
+        </div>
     </section>
 
     <!-- Open the modal using ID.showModal() method -->
-    
+
     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
             <div id="detail-box"></div>
